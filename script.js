@@ -90,6 +90,7 @@ generateBtn.addEventListener("click", () => {
         end = null;
         resizeCanvasToMatchDisplaySize(); // 🆕
         renderMaze(currentMaze);
+        customContainer.style.display = "none";
         alert("✅ Карта загружена. Выберите старт и финиш кликом по полю.");
     } catch (err) {
         alert(`❌ ${err.message}`);
