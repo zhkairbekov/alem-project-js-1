@@ -1,155 +1,226 @@
-/*=== Общие стили ===*/
+/* Базовая очистка и сброс */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Стили для body */
 body {
-  font-family: sans-serif;
-  text-align: center;
-  background: #f0f0f0;
-}
-
-/*=== Контейнер (аналог Bootstrap) ===*/
-.container {
-  width: 100%;
-  max-width: 1320px;
-  padding: 0 15px 2rem;
-  margin: 0 auto;
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  color: #000;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
   min-height: 100vh;
+  max-width: 100vw;
+  padding: 20px;
 }
 
-@media (max-width: 1399px) { .container { max-width: 1140px; } }
-@media (max-width: 1199px) { .container { max-width: 960px; } }
-@media (max-width: 991px)  { .container { max-width: 720px; } }
-@media (max-width: 767px)  { .container { max-width: 540px; } }
+/* Контейнер */
+.container {
+  width: 100vw;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+}
 
-/*=== Заголовок ===*/
+
+/* Заголовок */
 h1 {
-  margin: 2rem;
   font-size: 2rem;
-  color: #333;
   text-align: center;
+  margin-bottom: 8px;
 }
 
-/*=== Холст (canvas) ===*/
+/* Холст лабиринта */
 canvas {
-  border: 1px solid #ccc;
-  margin: 20px auto;
-  display: block;
+  border: 2px solid #888;
+  background-color: #fff;
+  display: flex;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 500px;
+  aspect-ratio: 1 / 1;
 }
 
-/*=== Лабиринт в виде сетки (если используется grid) ===*/
-#maze {
-  display: grid;
-  gap: 2px;
-  margin: 20px auto;
-  width: fit-content;
+/* Панель управления */
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2%;
+  justify-content: center;
+  width: 100%;
 }
 
-/*=== Ячейки ===*/
-.cell {
-  width: 24px;
-  height: 24px;
-  display: inline-block;
-  border-radius: 4px;
+.options{
+  width: 49%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
-.wall     { background: black; }
-.path     { background: white; }
-.start    { background: limegreen; }
-.end      { background: red; }
-.visited  { background: #87cefa; }
-.route    { background: gold; }
-
-/*=== Кнопки ===*/
-button,
-#custom-maze-container button {
-  padding: 10px 15px;
-  font-size: 16px;
-  cursor: pointer;
-  border: none;
-  border-radius: 4px;
+.option-1, .option-2{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
-button:hover,
-#custom-maze-container button:hover {
-  filter: brightness(0.9);
+.buttons{
+  width: 49%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
-.buttons button {
-  background-color: #007bff;
+/* Кнопки */
+button {
+  padding: 10px 16px;
+  font-size: 1rem;
+  background-color: #3a86ff;
   color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
 }
 
-.buttons button:hover {
-  background-color: #0056b3;
+button:hover {
+  background-color: #265fc1;
 }
 
-.buttons button:disabled,
-#custom-maze-container button:disabled {
-  background-color: #ccc;
+button:disabled {
+  background-color: #888;
   cursor: not-allowed;
 }
 
-#custom-maze-container button {
-  background-color: #28a745;
-  color: white;
+/* Инпуты и селекты */
+input[type="number"],
+select,
+textarea {
+  padding: 8px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #000;
 }
 
-#custom-maze-container button:hover {
-  background-color: #218838;
-}
-
-/*=== Контейнер с пользовательским лабиринтом ===*/
-#custom-maze-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  margin-top: 20px;
-}
-
-/*=== Textarea для пользовательского ввода ===*/
-#custom-maze,
-#custom-maze-container textarea {
+/* Текстовое поле для ввода лабиринта */
+textarea {
   width: 100%;
-  max-width: 600px;
-  min-height: 250px;
-  padding: 10px;
-  font-size: 16px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
+  min-height: 100px;
   resize: vertical;
+  font-family: monospace;
 }
 
-/*=== Панель управления ===*/
-.controls {
+/* Медиа-запросы */
+@media (max-width: 600px) {
+  h1 {
+      font-size: 1.5rem;
+  }
+
+  button {
+      font-size: 0.9rem;
+      padding: 8px 12px;
+  }
+
+  input,
+  select {
+      font-size: 0.9rem;
+  }
+}
+
+
+/* Popup */
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #222;
+  color: #fff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  max-width: 90%;
+  width: 400px;
+  z-index: 999;
+}
+
+/* Tooltip */
+.tooltip {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  position: absolute;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 0.5rem;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  z-index: 1000;
+  font-size: 0.8rem;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+
+/* Form elements */
+input[type="text"],
+select,
+button {
+  padding: 0.5rem 1rem;
+  border: 1px solid #aaa;
+  border-radius: 8px;
+  font-size: 1rem;
+  margin: 0.25rem 0;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+}
+
+.mobile-nav {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 1000;
+}
+
+.burger {
+  font-size: 2rem;
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+}
+
+.nav-menu {
+  display: none;
+  flex-direction: column;
+  gap: 0.5rem;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 1rem;
+  border-radius: 10px;
+  margin-top: 0.5rem;
+}
+
+.nav-menu.active {
   display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 20px;
 }
 
-/*=== Панель с кнопками ===*/
-.buttons {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-
-/*=== Селекты и их обёртка ===*/
-.options {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-
-.options label {
-  margin-right: 5px;
-}
-
-.options select,
-#maze-select,
-#speed {
-  padding: 5px;
-  font-size: 16px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
+@media (max-width: 768px) {
+  .container {
+      padding: 15px;
+  }
 }

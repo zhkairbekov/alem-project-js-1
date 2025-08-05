@@ -1,15 +1,13 @@
-//js-crunch01/script.js
+// js-crunch01/script.js
 
-//=== Импорт лабиринтов ===
 import { mazes } from "./mazes.js";
 
-//=== Глобальные переменные ===
 let currentMaze = [];
 let start = null;
 let end = null;
 let speed = 100;
 
-//=== DOM элементы ===
+// DOM элементы
 const canvas = document.getElementById("maze-canvas");
 const ctx = canvas.getContext("2d");
 
@@ -21,9 +19,14 @@ const resetBtn = document.getElementById("reset-btn");
 const startBtn = document.getElementById("start-btn");
 const generateBtn = document.getElementById("generate-btn");
 
-//=== Слушатели событий ===
+// === 🆕 Функция для синхронизации размеров canvas ===
+function resizeCanvasToMatchDisplaySize() {
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = rect.width;
+    canvas.height = rect.height;
+}
 
-//Смена лабиринта
+// Смена лабиринта
 mazeSelect.addEventListener("change", (e) => {
     const selected = e.target.value;
 
@@ -33,11 +36,12 @@ mazeSelect.addEventListener("change", (e) => {
         customContainer.style.display = "none";
         currentMaze = structuredClone(mazes[selected]);
         start = end = null;
+        resizeCanvasToMatchDisplaySize(); // 🆕
         renderMaze(currentMaze);
     }
 });
 
-//Смена скорости
+// Смена скорости
 speedSelect.addEventListener("change", (e) => {
     const speeds = {
         fast: 30,
@@ -47,7 +51,7 @@ speedSelect.addEventListener("change", (e) => {
     speed = speeds[e.target.value] || 100;
 });
 
-//Сброс страницы
+// Сброс
 resetBtn.addEventListener("click", () => location.reload());
 
 generateBtn.addEventListener("click", () => {
@@ -60,7 +64,6 @@ generateBtn.addEventListener("click", () => {
                 const trimmed = line.trim();
                 if (trimmed === "") return [];
 
-                // Если есть пробелы — разделяем по ним, иначе по каждому символу
                 const parts = /\s/.test(trimmed)
                     ? trimmed.split(/\s+/)
                     : trimmed.split("");
@@ -74,7 +77,7 @@ generateBtn.addEventListener("click", () => {
 
                 return numbers;
             })
-            .filter(row => row.length > 0); // убрать пустые строки
+            .filter(row => row.length > 0);
 
         const allSameLength = parsed.every(row => row.length === parsed[0].length);
         if (!allSameLength) {
@@ -85,6 +88,7 @@ generateBtn.addEventListener("click", () => {
         currentMaze = parsed;
         start = null;
         end = null;
+        resizeCanvasToMatchDisplaySize(); // 🆕
         renderMaze(currentMaze);
         alert("✅ Карта загружена. Выберите старт и финиш кликом по полю.");
     } catch (err) {
@@ -92,7 +96,7 @@ generateBtn.addEventListener("click", () => {
     }
 });
 
-//Старт поиска пути
+// Старт поиска
 startBtn.addEventListener("click", () => {
     if (!start || !end) {
         alert("⚠️ Выберите старт и финиш кликом по полю");
@@ -103,10 +107,11 @@ startBtn.addEventListener("click", () => {
         alert("❌ Старт и финиш не могут быть в одной ячейке.");
         return;
     }
+
     bfs(currentMaze, start, end);
 });
 
-//Установка стартовой/финишной точки кликом по полю
+// Клик по canvas
 canvas.addEventListener("click", (e) => {
     if (!currentMaze.length) return;
 
@@ -115,7 +120,7 @@ canvas.addEventListener("click", (e) => {
     const x = Math.floor(e.offsetX / cellSize);
     const y = Math.floor(e.offsetY / cellSize);
 
-    if (currentMaze[y][x] === 1) return; //Стена
+    if (currentMaze[y][x] === 1) return;
 
     if (!start) {
         start = [y, x];
@@ -129,13 +134,11 @@ canvas.addEventListener("click", (e) => {
     renderMaze(currentMaze);
 });
 
-//=== Функции ===
-
-//Отрисовка лабиринта
+// Отрисовка лабиринта
 function renderMaze(maze) {
     const rows = maze.length;
     const cols = maze[0].length;
-    const cellSize = 500 / Math.max(rows, cols);
+    const cellSize = Math.floor(canvas.width / cols);
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -161,37 +164,26 @@ function renderMaze(maze) {
     }
 }
 
-//Цвета ячеек
 function getColor(val) {
     switch (val) {
-        case 0:
-            return "#ffffff"; //Путь
-        case 1:
-            return "#000000"; //Стена
-        case 2:
-            return "#90caf9"; //Посещено
-        case 3:
-            return "#43a047"; //Финальный путь
-        default:
-            return "#ff00ff"; //Ошибка
+        case 0: return "#ffffff";
+        case 1: return "#000000";
+        case 2: return "#90caf9";
+        case 3: return "#43a047";
+        default: return "#ff00ff";
     }
 }
 
-//Задержка
 function sleep(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-//Алгоритм BFS
 async function bfs(maze, start, end) {
     const rows = maze.length;
     const cols = maze[0].length;
     const visited = Array.from({ length: rows }, () => Array(cols).fill(false));
     const parent = Array.from({ length: rows }, () => Array(cols).fill(null));
-    const queue = [
-        [...start]
-    ];
-
+    const queue = [[...start]];
     visited[start[0]][start[1]] = true;
 
     while (queue.length) {
@@ -201,7 +193,7 @@ async function bfs(maze, start, end) {
             return markFinalPath(parent, start, end);
         }
 
-        for (const [dy, dx] of[[1, 0], [0, 1], [-1, 0], [0, -1]]) {
+        for (const [dy, dx] of [[1, 0], [0, 1], [-1, 0], [0, -1]]) {
             const ny = y + dy;
             const nx = x + dx;
 
@@ -213,7 +205,7 @@ async function bfs(maze, start, end) {
             ) {
                 visited[ny][nx] = true;
                 parent[ny][nx] = [y, x];
-                maze[ny][nx] = 2; //Отметка как "посещено"
+                maze[ny][nx] = 2;
                 queue.push([ny, nx]);
                 renderMaze(maze);
                 await sleep(speed);
@@ -224,7 +216,6 @@ async function bfs(maze, start, end) {
     alert("❌ Путь не найден");
 }
 
-//Отметка финального пути
 async function markFinalPath(parent, start, end) {
     let [y, x] = end;
 
@@ -240,25 +231,23 @@ async function markFinalPath(parent, start, end) {
     alert("✅ Путь найден!");
 }
 
-//=== изменение select с лабиринтами ===
-const select = document.getElementById('maze-select');
+// === Генерация select с лабиринтами ===
+const select = document.getElementById("maze-select");
 
-//Генерируем <option> для каждого лабиринта
 function generateMazeOptions() {
     Object.keys(mazes).forEach((key, index) => {
-        const option = document.createElement('option');
+        const option = document.createElement("option");
         option.value = key;
         option.textContent = `Лабиринт ${index + 1}`;
         select.appendChild(option);
     });
 
-    //Добавляем "Своя карта"
-    const customOption = document.createElement('option');
-    customOption.value = 'custom';
-    customOption.textContent = 'Своя карта';
+    const customOption = document.createElement("option");
+    customOption.value = "custom";
+    customOption.textContent = "Своя карта";
     select.appendChild(customOption);
 }
 generateMazeOptions();
 
-//=== Инициализация ===
+// Инициализация
 mazeSelect.dispatchEvent(new Event("change"));
