@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8">
+        <title>Maze Escape</title>
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="nomalise.css">
+    </head>
+    <body>
+        <div class="container">
+            <h1>Maze Escape</h1>
+            <div class="controls">
+                <div class="options">
+                    <label for="maze-select">Карта:</label>
+                    <select id="maze-select"></select>
+                    <label for="speed">Скорость:</label>
+                    <select id="speed">
+                        <option value="fast">Быстро</option>
+                        <option value="normal" selected>Нормально</option>
+                        <option value="slow">Медленно</option>
+                    </select>
+                </div>
+                <div class="buttons" id="top-buttons">
+                    <button id="start-btn">Старт</button>
+                    <button id="reset-btn">Сброс</button>
+                </div>
+            </div>
+            <div id="custom-maze-container" style="display: none;">
+                <textarea id="custom-maze" rows="5" placeholder="0 1 0 0 ..."></textarea>
+                <div class="buttons" id="custom-buttons">
+                    <button id="generate-btn">Сгенерировать карту</button>
+                </div>
+            </div>
+            <br>
+            <canvas id="maze-canvas" width="500" height="500"></canvas>
+        </div>
+        <script type="module" src="script.js"></script>
+    </body>
+</html>

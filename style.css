@@ -1,0 +1,155 @@
+/*=== Общие стили ===*/
+body {
+  font-family: sans-serif;
+  text-align: center;
+  background: #f0f0f0;
+}
+
+/*=== Контейнер (аналог Bootstrap) ===*/
+.container {
+  width: 100%;
+  max-width: 1320px;
+  padding: 0 15px 2rem;
+  margin: 0 auto;
+  min-height: 100vh;
+}
+
+@media (max-width: 1399px) { .container { max-width: 1140px; } }
+@media (max-width: 1199px) { .container { max-width: 960px; } }
+@media (max-width: 991px)  { .container { max-width: 720px; } }
+@media (max-width: 767px)  { .container { max-width: 540px; } }
+
+/*=== Заголовок ===*/
+h1 {
+  margin: 2rem;
+  font-size: 2rem;
+  color: #333;
+  text-align: center;
+}
+
+/*=== Холст (canvas) ===*/
+canvas {
+  border: 1px solid #ccc;
+  margin: 20px auto;
+  display: block;
+}
+
+/*=== Лабиринт в виде сетки (если используется grid) ===*/
+#maze {
+  display: grid;
+  gap: 2px;
+  margin: 20px auto;
+  width: fit-content;
+}
+
+/*=== Ячейки ===*/
+.cell {
+  width: 24px;
+  height: 24px;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.wall     { background: black; }
+.path     { background: white; }
+.start    { background: limegreen; }
+.end      { background: red; }
+.visited  { background: #87cefa; }
+.route    { background: gold; }
+
+/*=== Кнопки ===*/
+button,
+#custom-maze-container button {
+  padding: 10px 15px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+}
+
+button:hover,
+#custom-maze-container button:hover {
+  filter: brightness(0.9);
+}
+
+.buttons button {
+  background-color: #007bff;
+  color: white;
+}
+
+.buttons button:hover {
+  background-color: #0056b3;
+}
+
+.buttons button:disabled,
+#custom-maze-container button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+#custom-maze-container button {
+  background-color: #28a745;
+  color: white;
+}
+
+#custom-maze-container button:hover {
+  background-color: #218838;
+}
+
+/*=== Контейнер с пользовательским лабиринтом ===*/
+#custom-maze-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+/*=== Textarea для пользовательского ввода ===*/
+#custom-maze,
+#custom-maze-container textarea {
+  width: 100%;
+  max-width: 600px;
+  min-height: 250px;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  resize: vertical;
+}
+
+/*=== Панель управления ===*/
+.controls {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+/*=== Панель с кнопками ===*/
+.buttons {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+/*=== Селекты и их обёртка ===*/
+.options {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.options label {
+  margin-right: 5px;
+}
+
+.options select,
+#maze-select,
+#speed {
+  padding: 5px;
+  font-size: 16px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
